@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Gestion des équipes et joueurs de football</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>Gestion des équipes et joueurs de football</h1>
+
+<h2>Section d'affichage des équipes</h2>
+<table id="teamsTable">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Nom</th>
+    <th>Entraîneur</th>
+    <th>Stade</th>
+    <th>Capacité</th>
+  </tr>
+  </thead>
+  <tbody id="teamsTableBody">
+  </tbody>
+</table>
+
+<h2>Section d'ajout d'une nouvelle équipe</h2>
+<form id="addTeamForm">
+  <label for="nom">Nom :</label>
+  <input type="text" id="nom" name="nom" required>
+  <br>
+  <label for="entraineur">Entraîneur :</label>
+  <input type="text" id="entraineur" name="entraineur">
+  <br>
+  <label for="stade">Stade :</label>
+  <input type="text" id

@@ -1,25 +1,25 @@
 package com.maigrot.springfoot.model;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 
 @Entity
+@Table(name = "player")
 public class Player {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String nom;
+    private String name;
 
-    private String dateNaissance;
+    @Column(nullable = false)
+    private String birthDate;
 
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "id_equipe")
+    @JoinColumn(name = "team_id")
     private Team team;
-
-    private String poste;
 
     // Getters and setters
 
@@ -32,20 +32,20 @@ public class Player {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDateNaissance() {
-        return dateNaissance;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setDateNaissance(String dateNaissance) {
-        this.dateNaissance = dateNaissance;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
     public Team getTeam() {
@@ -54,13 +54,5 @@ public class Player {
 
     public void setTeam(Team team) {
         this.team = team;
-    }
-
-    public String getPoste() {
-        return poste;
-    }
-
-    public void setPoste(String poste) {
-        this.poste = poste;
     }
 }

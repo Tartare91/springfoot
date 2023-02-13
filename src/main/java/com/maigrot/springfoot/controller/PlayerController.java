@@ -1,48 +1,55 @@
-package com.maigrot.springfoot.controller;// Import des classes nécessaires pour les contrôleurs Spring
+package com.maigrot.springfoot.controller;
+
+
 import com.maigrot.springfoot.model.Player;
 import com.maigrot.springfoot.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-// Définition de la classe PlayerController
+
 @RestController
-@RequestMapping("/players")
+@RequestMapping("/api/players")
 public class PlayerController {
-
-    // Injection de dépendance pour l'instance de PlayerRepository
     @Autowired
     private PlayerRepository playerRepository;
 
-    // Définition de la méthode pour récupérer tous les joueurs
-    @GetMapping
+    @GetMapping("")
     public List<Player> getAllPlayers() {
-        return playerRepository.findAllPlayers();
+        return playerRepository.findAll();
     }
 
-    // Définition de la méthode pour récupérer un joueur par son nom
-    @GetMapping("/{nom}")
-    public Player getPlayerByName(@PathVariable String nom) {
-        return playerRepository.findByName(nom);
+    @GetMapping("/{id}")
+    public ResponseEntity<Player> getPlayerById(@PathVariable(value = "id") Long playerId) {
+        Optional<Player> player = playerRepository.findById(playerId);
+        if (player.isPresent()) {
+            return ResponseEntity.ok().body(player.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Définition de la méthode pour récupérer les joueurs d'une équipe par son id
-    @GetMapping("/team/{id}")
-    public List<Player> getPlayersByTeamId(@PathVariable Long id) {
-        return playerRepository.findByTeamId(id);
-    }
-
-    // Définition de la méthode pour ajouter un nouveau joueur
-    @PostMapping
-    public Player addPlayer(@RequestBody Player player) {
+    @PostMapping("")
+    public Player createPlayer(@RequestBody Player player) {
         return playerRepository.save(player);
     }
 
-    // Définition de la méthode pour supprimer un joueur existant
-    @DeleteMapping("/{nom}")
-    public void deletePlayer(@PathVariable String nom) {
-        playerRepository.delete(playerRepository.findByName(nom));
+    @GetMapping("/teams/{teamId}")
+    public List<Player> getPlayersByTeamId(@PathVariable(value = "teamId") Long teamId) {
+        return playerRepository.findByTeamId(teamId);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlayer(@PathVariable(value = "id") Long playerId) {
+        Optional<Player> player = playerRepository.findById(playerId);
+        if (player.isPresent()) {
+            playerRepository.delete(player.get());
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

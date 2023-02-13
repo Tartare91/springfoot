@@ -1,50 +1,48 @@
-
-
-
 package com.maigrot.springfoot.controller;
-
-
-// Import des classes nécessaires pour les contrôleurs Spring
 
 import com.maigrot.springfoot.model.Team;
 import com.maigrot.springfoot.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-// Définition de la classe TeamController
 @RestController
-@RequestMapping("/teams")
+@RequestMapping("/api/teams")
 public class TeamController {
-
-    // Injection de dépendance pour l'instance de TeamRepository
     @Autowired
     private TeamRepository teamRepository;
 
-    // Définition de la méthode pour récupérer toutes les équipes
-    @GetMapping
+    @GetMapping("")
     public List<Team> getAllTeams() {
-        return teamRepository.findAllTeams();
+        return teamRepository.findAll();
     }
 
-    // Définition de la méthode pour récupérer une équipe par son nom
-    @GetMapping("/{nom}")
-    public Team getTeamByName(@PathVariable String nom) {
-        return teamRepository.findByName(nom);
+    @GetMapping("/{id}")
+    public ResponseEntity<Team> getTeamById(@PathVariable(value = "id") Long teamId) {
+        Optional<Team> team = teamRepository.findById(teamId);
+        if (team.isPresent()) {
+            return ResponseEntity.ok().body(team.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Définition de la méthode pour ajouter une nouvelle équipe
-    @PostMapping
-    public Team addTeam(@RequestBody Team team) {
+    @PostMapping("")
+    public Team createTeam(@RequestBody Team team) {
         return teamRepository.save(team);
     }
 
-    // Définition de la méthode pour supprimer une équipe existante
-    @DeleteMapping("/{nom}")
-    public void deleteTeam(@PathVariable String nom) {
-        teamRepository.delete(teamRepository.findByName(nom));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTeam(@PathVariable(value = "id") Long teamId) {
+        Optional<Team> team = teamRepository.findById(teamId);
+        if (team.isPresent()) {
+            teamRepository.delete(team.get());
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-
 }
-

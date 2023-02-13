@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Liste des équipes</title>
+</head>
+<body>
+<h1>Liste des équipes</h1>
+<ul id="team-list">
+</ul>
+
+<script>
+  function displayTeams() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var teams = JSON.parse(this.responseText);
+        var teamList = document.getElementById("team-list");
+        for (var i = 0; i < teams.length; i++) {
+          var teamItem = document.createElement("li");
+          var teamLink = document.createElement("a");
+          teamLink.href = "teamPlayerList.html?teamId=" + teams[i].id;
+          teamLink.textContent = teams[i].name;
+          teamItem.appendChild(teamLink);
+
+          var teamCoach = document.createElement("p");
+          teamCoach.textContent = "Coach : " + teams[i].coach;
+          teamItem.appendChild(teamCoach);
+
+          var teamStadium = document.createElement("p");
+          teamStadium.textContent = "Stade : " + teams[i].stadium;
+          teamItem.appendChild(teamStadium);
+
+          teamList.appendChild(teamItem);
+        }
+      }
+    };
+    xhttp.open("GET", "/api/teams", true);
+    xhttp.send();
+  }
+
+  displayTeams();
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Ajouter une équipe</title>
+</head>
+<body>
+<h1>Ajouter une équipe</h1>
+<form>
+  <label for="team-name">Nom de l'équipe :</label>
+  <input type="text" id="team-name" name="team-name">
+  <br><br>
+  <label for="coach">Entraîneur :</label>
+  <input type="text" id="coach" name="coach">
+  <br><br>
+  <label for="stadium">Stade :</label>
+  <input type="text" id="stadium" name="stadium">
+  <br><br>
+  <button type="button" onclick="createTeam()">Ajouter</button>
+</form>
+<p id="confirmation-message"></p>
+
+<script>
+  function createTeam() {
+    var teamName = document.getElementById("team-name").value;
+    var coach = document.getElementById("coach").value;
+    var stadium = document.getElementById("stadium").value;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 201) {
+        document.getElementById("confirmation-message").innerHTML = "L'équipe a été créée avec succès.";
+        alert("L'équipe a été créée avec succès.");
+      }
+    };
+    xhttp.open("POST", "/api/teams", true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(JSON.stringify({
+      name: teamName,
+      coach: coach,
+      stadium: stadium
+    }));
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Supprimer une équipe</title>
+</head>
+<body>
+<h1>Supprimer une équipe</h1>
+<form id="delete-form">
+  <label for="team-id">ID de l'équipe :</label>
+  <input type="text" id="team-id" name="team-id" required>
+  <br>
+  <br>
+  <button type="submit">Supprimer</button>
+</form>
+
+<p id="message"></p>
+
+<script>
+  var form = document.getElementById("delete-form");
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    var teamId = document.getElementById("team-id").value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 204) {
+        document.getElementById("message").textContent = "L'équipe a été supprimée avec succès.";
+      } else if (this.readyState == 4 && this.status == 404) {
+        document.getElementById("message").textContent = "L'équipe n'a pas été trouvée.";
+      }
+    };
+    xhttp.open("DELETE", "/api/teams/" + teamId, true);
+    xhttp.send();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Liste des joueurs</title>
+</head>
+<body>
+<h1>Joueurs</h1>
+<ul id="player-list">
+</ul>
+
+<script>
+  function displayPlayers() {
+    var teamId = getParameterByName("teamId");
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var team = JSON.parse(this.responseText);
+        var playerList = document.getElementById("player-list");
+        playerList.innerHTML = "";
+        for (var i = 0; i < team.players.length; i++) {
+          var playerItem = document.createElement("li");
+          playerItem.textContent = team.players[i].name;
+          playerList.appendChild(playerItem);
+        }
+      }
+    };
+    xhttp.open("GET", "/api/teams/" + teamId, true);
+    xhttp.send();
+
+
+  }
+  function getParameterByName(name) {
+    var url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  displayPlayers();
+</script>
+</body>
+</html>

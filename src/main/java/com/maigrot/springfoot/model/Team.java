@@ -1,22 +1,33 @@
 package com.maigrot.springfoot.model;
 
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-@Entity
-public class Team {
+import java.util.List;
 
+
+@Entity
+@Table(name = "team")
+public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String nom;
+    private String name;
 
-    private String entraineur;
+    @Column(nullable = false)
+    private String coach;
 
-    private String stade;
+    @Column(nullable = false)
+    private String stadium;
 
-    private int capacite;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<Player> players;
+
+
 
     // Getters and setters
 
@@ -29,35 +40,35 @@ public class Team {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getEntraineur() {
-        return entraineur;
+    public String getCoach() {
+        return coach;
     }
 
-    public void setEntraineur(String entraineur) {
-        this.entraineur = entraineur;
+    public void setCoach(String coach) {
+        this.coach = coach;
     }
 
-    public String getStade() {
-        return stade;
+    public String getStadium() {
+        return stadium;
     }
 
-    public void setStade(String stade) {
-        this.stade = stade;
+    public void setStadium(String stadium) {
+        this.stadium = stadium;
     }
 
-    public int getCapacite() {
-        return capacite;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setCapacite(int capacite) {
-        this.capacite = capacite;
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }
